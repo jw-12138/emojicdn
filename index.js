@@ -31,7 +31,12 @@ const buildRedirectUrl = (style, path) => {
 };
 
 const redirect = (url) => {
-  return fetch(url)
+  return fetch(url, {
+    headers: {
+      "Cache-Control": `public, max-age=${60 * 60 * 24 * 7}, immutable`,
+      "Access-Control-Allow-Origin": "*"
+    },
+  })
 };
 
 export default {
@@ -44,6 +49,20 @@ export default {
       return new Response(`This is a CDN for emojis, try to add any emoji at the end of the url. like:
       
   ${url.href}👍
+  
+For more control, add the \`style\` query parameter to specify an emoji platform:
+
+  ${url.href}🥳?style=google
+
+If no \`style\` is provided, the API defaults to \`apple\`.
+
+Supported styles:
+
+  - \`apple\`
+  - \`google\`
+  - \`facebook\`
+  - \`twitter\`
+
       
 This project was made by https://github.com/benborgers/emojicdn, and hosted by https://github.com/jw-12138`, {
         headers: {
