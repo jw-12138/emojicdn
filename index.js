@@ -31,14 +31,7 @@ const buildRedirectUrl = (style, path) => {
 };
 
 const redirect = (url) => {
-  return new Response("", {
-    status: 302,
-    headers: {
-      Location: url,
-      "Access-Control-Allow-Origin": "*",
-      "Cache-Control": `public, max-age=${60 * 60 * 24 * 7}`,
-    },
-  });
+  return fetch(url)
 };
 
 export default {
@@ -48,7 +41,15 @@ export default {
     const style = url.searchParams.get("style") ?? "apple";
 
     if (path === "") {
-      return redirect("https://github.com/benborgers/emojicdn");
+      return new Response(`This is a CDN for emojis, try to add any emoji at the end of the url. like:
+      
+  ${url.href}👍
+      
+This project was made by https://github.com/benborgers/emojicdn, and hosted by https://github.com/jw-12138`, {
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+        }
+      });
     }
 
     if (path === "favicon.ico") {
